@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#24362f">
+<meta name="description" content="拉撒咪呀居酒屋的食物與酒飲">
+<title>拉撒咪呀居酒屋</title>
+<style id="app-style">
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans CJK TC", sans-serif;
+  color: #241c16;
+  background: #f3eee6;
+}
+button, input { font-family: inherit; }
+button { cursor: pointer; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+::selection { background: #efd3c6; }
+:focus-visible { outline: 2px solid #c46a4a; outline-offset: 3px; }
+
+.sticky-head {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #24362f;
+  color: #f6f1e8;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 58px;
+  padding: calc(8px + env(safe-area-inset-top)) 16px 8px;
+}
+.brand-wrap { min-width: 0; }
+.brand-label, .field-label {
+  display: none;
+  margin: 0 0 4px;
+  color: #e7b8a4;
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+body.is-editing .brand-label,
+body.is-editing .field-label { display: block; }
+.brand {
+  margin: 0;
+  font-size: clamp(18px, 2.4vw, 22px);
+  font-weight: 700;
+  line-height: 1.35;
+}
+body:not(.is-editing) .brand {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.edit-toggle {
+  flex: none;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #f3e6d4;
+  color: #24362f;
+  font-size: 16px;
+}
+.quick {
+  display: flex;
+  gap: 16px;
+  padding: 0 16px 8px;
+  font-size: 14px;
+}
+.quick a { text-underline-offset: 3px; }
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 16px 8px;
+}
+.tabs-hint {
+  display: none;
+  margin: 0;
+  padding: 0 16px 6px;
+  color: #e7b8a4;
+  font-size: 12px;
+  letter-spacing: .06em;
+  line-height: 1.4;
+}
+body.is-editing .tabs-hint { display: block; }
+.tabs .tab {
+  min-height: 44px;
+  padding: 0;
+  cursor: pointer;
+  border: 1px solid rgba(246, 241, 232, .45);
+  border-radius: 999px;
+  background: transparent;
+  color: #f6f1e8;
+  font-size: 16px;
+  text-align: center;
+}
+.tab-label {
+  display: block;
+  width: 100%;
+  padding: 10px 8px;
+  overflow-wrap: anywhere;
+  line-height: 1.3;
+}
+.tabs .tab.is-on { background: #f6f1e8; color: #24362f; }
+body.is-editing .tabs .tab:not(.is-on) [contenteditable="true"] {
+  outline-color: rgba(246, 241, 232, .9);
+}
+.chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 16px 10px;
+  background: #f3eee6;
+  border-bottom: 1px solid #e4dacd;
+  scrollbar-width: none;
+}
+.chips::-webkit-scrollbar { display: none; }
+.chips button {
+  flex: none;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid #d7cfc3;
+  border-radius: 999px;
+  background: #fff;
+  color: #24362f;
+  font-size: 15px;
+}
+
+.group { scroll-margin-top: 168px; }
+.group + .group { border-top: 12px solid #e7dfd2; }
+.group-head { padding: 28px 20px 4px; }
+.group-title {
+  margin: 0;
+  font-family: "Palatino Linotype", "PMingLiU", "Songti TC", serif;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+.group-en {
+  margin: 4px 0 0;
+  color: #6d6560;
+  font-size: 14px;
+  letter-spacing: .06em;
+}
+.group-note {
+  margin: 10px 0 0;
+  color: #3c342d;
+  font-size: 16px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  min-height: 68vh;
+  background: #f7f3ec;
+}
+.spread + .spread {
+  position: relative;
+  border-top: 18px solid #f3eee6;
+}
+.spread + .spread::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: -10px;
+  height: 1px;
+  background: #c9baa8;
+}
+.photo {
+  position: relative;
+  min-height: 280px;
+  overflow: hidden;
+  background: #2a2420;
+}
+.photo img, .ph {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.photo img { object-fit: cover; }
+.photo img.contain { object-fit: contain; background: #f7f3ec; }
+.photo.has-contain { background: #f7f3ec; }
+.ph {
+  display: grid;
+  place-items: center;
+  color: rgba(247, 243, 236, .9);
+  font-family: "Palatino Linotype", "PMingLiU", serif;
+  font-size: 96px;
+  user-select: none;
+}
+.photo-btn {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 0;
+  background: transparent;
+}
+.photo-btn span {
+  position: absolute;
+  left: 50%;
+  top: 72%;
+  transform: translate(-50%, -50%);
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .95);
+  color: #241c16;
+  font-size: 16px;
+  line-height: 1.4;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+  white-space: nowrap;
+}
+.copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: clamp(22px, 4vw, 56px);
+}
+@supports (justify-content: safe center) {
+  .copy { justify-content: safe center; }
+}
+.copy-inner { width: 100%; }
+.num {
+  margin: 0 0 8px;
+  color: #9c3b2e;
+  font-family: "Palatino Linotype", Palatino, serif;
+  font-size: 13px;
+  letter-spacing: .18em;
+}
+.title {
+  margin: 0;
+  font-family: "Palatino Linotype", "PMingLiU", "Songti TC", serif;
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.en {
+  margin: 8px 0 0;
+  color: #6d6560;
+  font-size: 15px;
+  letter-spacing: .03em;
+  overflow-wrap: anywhere;
+}
+.price {
+  margin: 14px 0 0;
+  color: #9c3b2e;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.body {
+  margin: 12px 0 0;
+  color: #3c342d;
+  font-size: 17px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+body.is-editing [contenteditable="true"] {
+  outline: 1px dashed rgba(156, 59, 46, .55);
+  outline-offset: 6px;
+  border-radius: 6px;
+}
+.field-label { color: #9c3b2e; font-size: 13px; letter-spacing: .08em; }
+.item-tools, .group-tools, .edit-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.item-tools { margin-top: 22px; }
+.group-tools { margin: 14px 20px 0; }
+.item-tools button, .group-tools button, .edit-actions button {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid #d9cfc3;
+  border-radius: 999px;
+  background: #fff;
+  color: #241c16;
+  font-size: 16px;
+}
+button:disabled { opacity: .4; cursor: not-allowed; }
+.editbar {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: #fffaf3;
+  border-top: 1px solid #e4dacd;
+  box-shadow: 0 -8px 24px rgba(36, 28, 22, .06);
+}
+body.is-editing .editbar { display: block; }
+body.is-editing { padding-bottom: calc(168px + env(safe-area-inset-bottom)); }
+.status { margin: 0 0 8px; color: #6a5e54; font-size: 14px; line-height: 1.6; }
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.check input { width: 18px; height: 18px; margin-top: 2px; flex: none; }
+#downloadBtn { flex: 1 1 180px; border-color: #9c3b2e; background: #9c3b2e; color: #fff; }
+#resetBtn { color: #6a5e54; background: transparent; }
+.noscript { padding: 24px; line-height: 1.7; }
+
+@media (max-width: 800px) {
+  .spread { display: flex; flex-direction: column; min-height: 0; }
+  .photo { height: 68vw; min-height: 220px; max-height: 420px; flex: none; }
+  body.is-editing .photo { height: 48vw; min-height: 180px; max-height: 240px; }
+  .copy { padding: 20px 18px 28px; }
+  .title { font-size: 30px; }
+  #downloadBtn { flex-basis: 100%; }
+  body.is-editing { padding-bottom: calc(220px + env(safe-area-inset-bottom)); }
+  body.is-typing .editbar { display: none; }
+  body.is-typing.is-editing { padding-bottom: 24px; }
+  .group { scroll-margin-top: 196px; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .spread {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: calc(100dvh - 150px);
+  }
+  .photo { height: auto; max-height: none; min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<noscript><p class="noscript">請用瀏覽器開啟這個檔案。</p></noscript>
+<div class="sticky-head">
+  <header class="topbar">
+    <div class="brand-wrap">
+      <p class="brand-label">餐廳名稱（點字即可修改）</p>
+      <h1 id="brand" class="brand" aria-label="餐廳名稱"></h1>
+    </div>
+    <button type="button" id="editToggle" class="edit-toggle">編輯內容</button>
+  </header>
+  <div class="quick">
+    <a href="https://maps.app.goo.gl/XQ9icxjaansuzrmB9" target="_blank" rel="noopener">Google 地圖</a>
+    <a href="https://www.instagram.com/rasamiyaizakaya/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+  <p class="tabs-hint">分頁名稱（點字即可修改）</p>
+  <div class="tabs" id="tabs" role="tablist">
+    <div class="tab" data-tab="food" role="tab" tabindex="0"><span class="tab-label">食物</span></div>
+    <div class="tab" data-tab="drink" role="tab" tabindex="0"><span class="tab-label">酒飲</span></div>
+  </div>
+  <div class="chips" id="chips"></div>
+</div>
+<main id="list" aria-label="菜單"></main>
+<div class="editbar" id="editbar">
+  <p class="status" id="status" aria-live="polite"></p>
+  <label class="check">
+    <input type="checkbox" id="hideEdit" checked>
+    給客人的檔案隱藏編輯按鈕
+  </label>
+  <div class="edit-actions">
+    <button type="button" id="downloadBtn">下載網頁</button>
+    <button type="button" id="addBtn">加一項</button>
+    <button type="button" id="resetBtn">恢復菜單</button>
+  </div>
+</div>
+<input id="file" type="file" accept="image/*" hidden>
+<script id="site-data" type="application/json">{"updatedAt":1}</script>
+<script id="app-script">
+(function () {
+  var EDITOR_KEY = "rasamiya-menu-v1";
+  var HIDE_KEY = "rasamiya-menu-hide-edit";
+  var brand = document.getElementById("brand");
+  var list = document.getElementById("list");
+  var chips = document.getElementById("chips");
+  var editToggle = document.getElementById("editToggle");
+  var statusEl = document.getElementById("status");
+  var downloadBtn = document.getElementById("downloadBtn");
+  var addBtn = document.getElementById("addBtn");
+  var resetBtn = document.getElementById("resetBtn");
+  var hideEdit = document.getElementById("hideEdit");
+  var fileInput = document.getElementById("file");
+  var editing = false;
+  var storageKey = EDITOR_KEY;
+  var saveTimer = 0;
+  var typingTimer = 0;
+  var statusNote = "修改會先記在這台電腦。傳給客人時，請連 images 資料夾一起傳。";
+  var pickingId = "";
+
+  function item(id, title, english, price, text, image, fit) {
+    return { id: id, title: title, english: english, price: price, text: text, image: image || "", fit: fit || "" };
+  }
+
+  function defaultState() {
+    return {
+      updatedAt: 1,
+      restaurantName: "拉撒咪呀居酒屋",
+      tab: "food",
+      tabs: [
+        {
+          id: "food",
+          name: "食物",
+          groups: [
+            {
+              id: "about",
+              name: "用餐須知",
+              english: "Before you order",
+              note: "",
+              items: [
+                item("about", "餐食介紹", "Rasamiya Izakaya", "", "歡迎來拉撒咪呀居酒屋。\n\n現金交易，可轉帳。\n不收服務費。\n自帶酒酌收開瓶費 500 元／瓶。\n低消 300 元／人。", "images/storefront.png")
+              ]
+            },
+            {
+              id: "fried",
+              name: "炸物",
+              english: "Deep-fried Food",
+              note: "隱藏點法：雞三寶，唐揚、雞軟骨、雞皮一次點滿。",
+              items: [
+                item("cartilage", "酥炸雞軟骨", "Crispy Fried Chicken Cartilage", "NTD 150 / 份", "", "images/cartilage.png"),
+                item("skin", "椒鹽炸雞皮", "Fried Chicken Skin", "NTD 120 / 份", "", ""),
+                item("karaage", "唐揚雞", "Chicken Karaage", "NTD 195 / 份", "", "images/karaage.png"),
+                item("squid", "海鹽炸中卷", "Fried Squid", "NTD 230 / 份", "", "images/squid.png"),
+                item("tempura", "天婦羅炸蝦", "Shrimp Tempura", "NTD 160 / 2尾", "", "images/shrimp-tempura.png"),
+                item("mackerel", "炸竹莢魚", "Fried Horse Mackerel", "NTD 140 / 2尾", "", "images/mackerel.png"),
+                item("oyster", "廣島炸牡蠣", "Fried Oysters", "NTD 180 / 2顆", "", ""),
+                item("salmon", "北海道炸鮭魚", "Fried Salmon", "NTD 160 / 份", "", "images/salmon.png"),
+                item("croquette", "北海道可樂餅", "Potato Croquette", "NTD 120 / 2顆", "", "images/croquette.png"),
+                item("tofu", "黃金炸豆腐", "Golden Crispy Tofu", "NTD 160 / 份", "", "images/tofu.png"),
+                item("corn", "玉米筍", "Fried Baby Corn", "NTD 120 / 份", "", "images/baby-corn.png"),
+                item("cutlet", "炸牛肉餅", "Fried Beef Cutlet", "NTD 120 / 1顆", "", "images/beef-cutlet.png")
+              ]
+            },
+            {
+              id: "seafood",
+              name: "海鮮 / 湯",
+              english: "Seafood / Soup",
+              note: "",
+              items: [
+                item("clams", "蒜燒酒蛤蜊", "Garlic Sake Steamed Clams", "NTD 280 / 份", "熟食", "images/clams.png"),
+                item("saba", "烤鯖魚一夜干", "Grilled Mackerel Ichiyaboshi", "NTD 385 / 整尾", "熟食", "images/saba.png"),
+                item("gshrimp", "西西里蒜蝦", "Sicilian Garlic Shrimp", "NTD 300 / 份", "熟食", "images/garlic-shrimp.png"),
+                item("octopus", "生山葵章魚", "Raw Octopus with Wasabi", "NTD 160 / 份", "生食", "images/octopus.png"),
+                item("liver", "涼拌鱈魚肝", "Torched Cod Liver", "NTD 160 / 份", "生／半生食", "images/cod-liver.png"),
+                item("soup", "蛤蜊湯", "Clam Soup", "NTD 120 / 碗", "湯品", "images/clam-soup.png")
+              ]
+            },
+            {
+              id: "meat",
+              name: "牛豬雞",
+              english: "Beef / Pork / Chicken",
+              note: "",
+              items: [
+                item("ribs", "炙燒牛肋", "Seared Beef Ribs", "NTD 225 / 份", "", "images/beef-ribs.png"),
+                item("hearts", "蔥鹽雞心", "Chicken Hearts with Scallion Salt", "NTD 155 / 份", "", "images/chicken-hearts.png"),
+                item("thigh", "椒鹽雞腿肉", "Salt & Pepper Chicken Thigh", "NTD 185 / 份", "", "images/chicken-thigh.png"),
+                item("jowl", "松阪豬", "Matsusaka Pork (Jowl)", "NTD 220 / 份", "", "images/pork-jowl.png"),
+                item("belly", "厚切五花", "Thick-Cut Pork Belly", "NTD 195 / 份", "", "images/pork-belly.png")
+              ]
+            },
+            {
+              id: "yaki",
+              name: "燒 / 飯麵",
+              english: "Tamagoyaki / Okonomiyaki / Rice / Noodle",
+              note: "",
+              items: [
+                item("tama", "玉子燒", "Tamagoyaki", "NTD 130～180 / 份", "原味／起司／明太子", "images/tamagoyaki.png"),
+                item("oko", "大阪燒", "Okonomiyaki", "NTD 260～300 / 份", "起司／培根／明太子", "images/okonomiyaki.png"),
+                item("riceball", "明太子飯糰", "Grilled Mentaiko Rice Ball", "NTD 120 / 顆", "", "images/rice-ball.png"),
+                item("noodles", "炒泡麵", "Fried Instant Noodles", "NTD 255 / 份", "", "images/fried-noodles.png"),
+                item("udon", "明太子烏龍麵", "Mentaiko Udon", "NTD 300 / 份", "", "images/udon.png")
+              ]
+            },
+            {
+              id: "veg",
+              name: "野菜 / 冷菜",
+              english: "Vegetables / Cool Dishes",
+              note: "",
+              items: [
+                item("yam", "明太子山藥", "Grilled Yam with Mentaiko", "NTD 200 / 份", "", "images/yam.png"),
+                item("shishito", "烤糯米椒", "Grilled Shishito Peppers", "NTD 100 / 份", "", "images/shishito.png"),
+                item("zucchini", "烤櫛瓜", "Grilled Zucchini", "NTD 150 / 份", "", "images/zucchini.png"),
+                item("cabbage", "胡麻高麗菜", "Cabbage with Sesame Dressing", "NTD 180 / 份", "", "images/cabbage.png"),
+                item("tomato", "凍梅釀番茄", "Chilled Plum-Marinated Tomatoes", "NTD 120 / 份", "", "images/tomato.png")
+              ]
+            },
+            {
+              id: "sweet",
+              name: "陪酒物 / 甜點",
+              english: "Bar Snacks / Desserts",
+              note: "",
+              items: [
+                item("sausage", "帶骨香腸", "Bone-in Sausages", "NTD 150 / 2本", "", "images/sausage.png"),
+                item("feet", "日式無骨雞爪", "JP-Style Boneless Chicken Feet", "NTD 100 / 份", "", "images/chicken-feet.png"),
+                item("dango", "三色糰子", "Sanshoku Dango", "NTD 100 / 1本", "黑糖／黃豆／抹茶擇一", "images/dango.png"),
+                item("warabi", "蕨餅", "Warabimochi", "NTD 120 / 份", "黃豆／抹茶擇一", "images/warabi.png")
+              ]
+            }
+          ]
+        },
+        {
+          id: "drink",
+          name: "酒飲",
+          groups: [
+            {
+              id: "sake",
+              name: "清酒",
+              english: "Sake",
+              note: "目前酒單先放清酒。小瓶 300ml，大瓶 720ml。沒有寫出來的尺寸，代表現在沒有這一瓶。",
+              items: [
+                item("ittteki", "一滴入魂", "賀茂鶴｜純米吟釀", "300ml 850 元　720ml 1,850 元", "香氣層層打開，溫潤而辛口，餘味留得久。\n精米步合 60%｜八反錦1號｜酒精度 15.5%｜日本酒度 +3", "images/sake-ittteki.png", "contain"),
+                item("ginhitomi", "吟之瞳", "喜多屋｜大吟釀", "300ml 800 元　720ml 1,800 元", "生酒呈現俐落辛口、圓潤口感。100% 使用在地「吟之里」，果香輕盈。\n精米步合 50%｜吟之里｜酒精度 15.2%｜日本酒度 +6", "images/sake-gin.png", "contain"),
+                item("konishi", "金 冷榨", "小西酒造｜大吟釀", "720ml 1,750 元", "沒有傳統穀物味，帶水梨、哈密瓜的瓜果香。微甘口，容易入口。\n精米步合 50%｜山田錦｜酒精度 15.5%｜日本酒度 +1", "images/sake-konishi.png", "contain"),
+                item("tosa", "土佐之宴", "土佐鶴｜無濾過純米酒", "720ml 1,000 元", "無濾過辛口純米酒。米香醇厚，酸味適中，入口滑順。\n精米步合 68%｜高知縣米｜酒精度 13%｜日本酒度 +", "images/sake-tosa.png", "contain"),
+                item("takumi", "匠", "京姬｜大吟釀", "300ml 660 元", "山田錦釀成。酒質纖細，口感清爽，淡淡米香。\n精米步合 50%｜山田錦｜酒精度 15%｜日本酒度 +1", "images/sake-takumi.png", "contain"),
+                item("omachi", "備前雄町", "浜福鶴｜大吟釀", "300ml 590 元", "雄町米釀成，蘋果香，口感滑潤，淡麗辛口。\n精米步合 50%｜雄町米｜酒精度 15%｜日本酒度 +1", "images/sake-omachi.png", "contain"),
+                item("sakura", "櫻花", "黃櫻｜純米吟釀", "300ml 440 元", "黃櫻花酵母釀成，花果香，淡麗清甜。味道柔順。\n精米步合 60%｜吟之里｜酒精度 12%｜日本酒度 -8", "images/sake-sakura.png", "contain")
+              ]
+            },
+            {
+              id: "nama",
+              name: "生原酒／氣泡",
+              english: "Namazake / Soda",
+              note: "日本盛。瓶身是 200ml。簡報上還沒有標價格，可以之後再補。",
+              items: [
+                item("honjozo", "本釀造生原酒", "日本盛｜白瓶", "", "奢華醇厚，保留經典風味，濃醇旨味。\n200ml", "images/sake-honjozo.png", "contain"),
+                item("namagin", "大吟釀生原酒", "日本盛｜藍瓶", "", "吟釀香氣華麗，清爽細膩，尾韻乾淨。\n200ml", "images/sake-daiginjo-nama.png", "contain"),
+                item("namajun", "純米吟釀生原酒", "日本盛｜紅瓶", "", "醇厚旨味配上細緻果香，口感平衡，微辛口。\n200ml", "images/sake-junmai-ginjo.png", "contain"),
+                item("namadai", "純米大吟釀生原酒", "日本盛｜金瓶", "", "蘋果與水蜜桃般的果香。口感醇厚圓潤，層次清楚。\n200ml", "images/sake-junmai-daiginjo.png", "contain"),
+                item("soda", "JAPAN SODA", "日本盛｜氣泡清酒", "", "日本酒加入碳酸，酸甜輕盈，有細緻氣泡。\n200ml｜酒精度 7%", "images/sake-soda.png", "contain")
+              ]
+            },
+            {
+              id: "challenge",
+              name: "挑戰",
+              english: "Challenges",
+              note: "請適量評估，理性飲酒。快樂飲酒，平安回家。\n拉撒咪呀保有活動變更權。",
+              items: [
+                item("beer", "生啤挑戰", "1 Liter Draft Beer", "25 秒內喝完，這杯免費", "老闆敢請，你敢挑戰嗎？", "images/beer-challenge.png"),
+                item("bomb", "拿命來 Bomb", "Shot and Draft", "8 秒內完成，這杯免費", "先把 A Shot 喝完，再把 B Shot 倒進生啤，一口氣喝完。", "images/bomb.png")
+              ]
+            }
+          ]
+        }
+      ]
+    };
+  }
+
+  function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+  function readStore(key) {
+    try { return JSON.parse(localStorage.getItem(key) || "null"); }
+    catch (e) { return null; }
+  }
+
+  function parseEmbedded() {
+    try { return JSON.parse(document.getElementById("site-data").textContent); }
+    catch (e) { return null; }
+  }
+
+  function normalize(source) {
+    var base = source && Array.isArray(source.tabs) ? source : defaultState();
+    return {
+      updatedAt: base.updatedAt || 1,
+      menuOrder: base.menuOrder || 0,
+      fileId: base.fileId || "",
+      restaurantName: base.restaurantName || "拉撒咪呀居酒屋",
+      tab: base.tab === "drink" ? "drink" : "food",
+      tabs: base.tabs.map(function (tab) {
+        return {
+          id: tab.id,
+          name: tab.name,
+          groups: (tab.groups || []).map(function (group) {
+            return {
+              id: group.id,
+              name: group.name || "",
+              english: group.english || "",
+              note: group.note || "",
+              items: (group.items || []).map(function (entry, index) {
+                return {
+                  id: entry.id || ("p" + index),
+                  title: entry.title || "",
+                  english: entry.english || "",
+                  price: entry.price || "",
+                  text: entry.text || "",
+                  image: entry.image || "",
+                  fit: entry.fit || ""
+                };
+              })
+            };
+          })
+        };
+      })
+    };
+  }
+
+  function loadState() {
+    var embedded = parseEmbedded();
+    if (embedded && Array.isArray(embedded.tabs) && embedded.tabs.length) {
+      storageKey = "rasamiya-menu-" + (embedded.fileId || "snapshot");
+      var savedFile = readStore(storageKey);
+      if (savedFile && Array.isArray(savedFile.tabs) && (savedFile.updatedAt || 0) >= (embedded.updatedAt || 0)) {
+        return normalize(savedFile);
+      }
+      return normalize(embedded);
+    }
+    storageKey = EDITOR_KEY;
+    var saved = readStore(storageKey);
+    if (saved && Array.isArray(saved.tabs) && saved.tabs.length) return normalize(saved);
+    return normalize(defaultState());
+  }
+
+  var state = loadState();
+
+  function upgradeDrinks(current) {
+    var drink = null;
+    current.tabs.forEach(function (tab) {
+      if (tab.id === "drink") drink = tab;
+    });
+    if (!drink) return;
+    var hasOldList = false;
+    drink.groups.forEach(function (group) {
+      if (group.id === "drinks") hasOldList = true;
+    });
+    if (!hasOldList) return;
+    var fresh = null;
+    defaultState().tabs.forEach(function (tab) {
+      if (tab.id === "drink") fresh = tab;
+    });
+    var kept = drink.groups.filter(function (group) { return group.id === "challenge"; });
+    var added = fresh.groups.filter(function (group) { return group.id !== "challenge"; });
+    drink.groups = added.concat(kept);
+  }
+  upgradeDrinks(state);
+
+  function placeChallengeLast(current) {
+    if ((current.menuOrder || 0) >= 2) return;
+    current.tabs.forEach(function (tab) {
+      if (tab.id !== "drink") return;
+      var index = -1;
+      tab.groups.forEach(function (group, i) {
+        if (group.id === "challenge") index = i;
+      });
+      if (index >= 0 && index !== tab.groups.length - 1) {
+        tab.groups.push(tab.groups.splice(index, 1)[0]);
+      }
+    });
+    current.menuOrder = 2;
+  }
+  placeChallengeLast(state);
+
+  function activeTab() {
+    var found = state.tabs.filter(function (tab) { return tab.id === state.tab; })[0];
+    return found || state.tabs[0];
+  }
+
+  function locate(id) {
+    var t, g, index;
+    for (t = 0; t < state.tabs.length; t += 1) {
+      var groups = state.tabs[t].groups;
+      for (g = 0; g < groups.length; g += 1) {
+        index = -1;
+        groups[g].items.forEach(function (entry, itemIndex) {
+          if (entry.id === id) index = itemIndex;
+        });
+        if (index >= 0) return { group: groups[g], index: index };
+      }
+    }
+    return null;
+  }
+
+  function readText(el, single) {
+    var text = (el.innerText || "").replace(/\u00a0/g, " ").replace(/\n+$/g, "");
+    if (single) text = text.replace(/\n/g, " ").trim();
+    return text;
+  }
+
+  function insertPlain(text) {
+    var sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    var range = sel.getRangeAt(0);
+    range.deleteContents();
+    var node = document.createTextNode(text);
+    range.insertNode(node);
+    range.setStartAfter(node);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  function setTyping(on) {
+    clearTimeout(typingTimer);
+    if (on) document.body.classList.add("is-typing");
+    else typingTimer = setTimeout(function () { document.body.classList.remove("is-typing"); }, 160);
+  }
+
+  function bindPlain(el, onChange, single) {
+    el.addEventListener("paste", function (e) {
+      e.preventDefault();
+      var data = e.clipboardData || window.clipboardData;
+      var text = data ? data.getText ? data.getText("text/plain") : data.getData("text/plain") : "";
+      if (!text && data && data.getData) text = data.getData("text/plain");
+      if (single) text = text.replace(/\s+/g, " ").trim();
+      insertPlain(text);
+      onChange(readText(el, single));
+    });
+    if (single) {
+      el.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") e.preventDefault();
+      });
+    }
+    el.addEventListener("input", function () { onChange(readText(el, single)); });
+    el.addEventListener("focus", function () { setTyping(true); });
+    el.addEventListener("blur", function () { setTyping(false); });
+  }
+
+  function writeStatus() {
+    if (!editing) { statusEl.textContent = ""; return; }
+    var count = 0;
+    activeTab().groups.forEach(function (group) { count += group.items.length; });
+    statusEl.textContent = activeTab().name + "共 " + count + " 項。" + statusNote;
+  }
+
+  function saveNow() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({
+        updatedAt: state.updatedAt,
+        menuOrder: state.menuOrder || 0,
+        fileId: state.fileId || "",
+        restaurantName: state.restaurantName,
+        tab: state.tab,
+        tabs: state.tabs
+      }));
+      statusNote = "已記在這台電腦。傳給客人時，請連 images 資料夾一起傳。";
+    } catch (e) {
+      statusNote = "空間不夠。請少放幾張新照片，或先把整個資料夾備份。";
+    }
+    writeStatus();
+  }
+
+  function touch() {
+    state.updatedAt = Date.now();
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNow, 250);
+  }
+
+  function flushEditors() {
+    if (brand.getAttribute("contenteditable") === "true") {
+      state.restaurantName = readText(brand, true).trim() || "拉撒咪呀居酒屋";
+    }
+    Array.prototype.forEach.call(document.querySelectorAll(".tabs .tab"), function (button) {
+      var label = button.querySelector(".tab-label");
+      if (!label || label.getAttribute("contenteditable") !== "true") return;
+      var id = button.getAttribute("data-tab");
+      state.tabs.forEach(function (tab) {
+        if (tab.id !== id) return;
+        var name = readText(label, true).trim();
+        if (name) tab.name = name;
+      });
+    });
+    Array.prototype.forEach.call(list.querySelectorAll(".group"), function (section) {
+      var group = null;
+      activeTab().groups.forEach(function (entry) {
+        if (entry.id === section.getAttribute("data-group")) group = entry;
+      });
+      if (!group) return;
+      var note = section.querySelector(".group-note");
+      if (note && note.getAttribute("contenteditable") === "true") group.note = readText(note, false);
+    });
+    Array.prototype.forEach.call(list.querySelectorAll(".spread"), function (section) {
+      var found = locate(section.getAttribute("data-id"));
+      if (!found) return;
+      var entry = found.group.items[found.index];
+      var title = section.querySelector(".title");
+      var english = section.querySelector(".en");
+      var price = section.querySelector(".price");
+      var body = section.querySelector(".body");
+      if (title && title.getAttribute("contenteditable") === "true") entry.title = readText(title, true);
+      if (english && english.getAttribute("contenteditable") === "true") entry.english = readText(english, true);
+      if (price && price.getAttribute("contenteditable") === "true") entry.price = readText(price, true);
+      if (body && body.getAttribute("contenteditable") === "true") entry.text = readText(body, false);
+    });
+  }
+
+  function blankItem() {
+    return item("p" + Date.now().toString(36), "新的品項", "", "", "點這裡寫介紹。", "");
+  }
+
+  function render(keepScroll) {
+    var y = keepScroll === false ? 0 : window.scrollY;
+    document.body.classList.toggle("is-editing", editing);
+    if (document.activeElement !== brand) brand.textContent = state.restaurantName || "拉撒咪呀居酒屋";
+    brand.contentEditable = editing ? "true" : "false";
+    document.title = state.restaurantName || "拉撒咪呀居酒屋";
+    if (editToggle) {
+      editToggle.textContent = editing ? "完成" : "編輯內容";
+      editToggle.setAttribute("aria-pressed", editing ? "true" : "false");
+    }
+    Array.prototype.forEach.call(document.querySelectorAll(".tabs .tab"), function (button) {
+      var id = button.getAttribute("data-tab");
+      var tab = null;
+      state.tabs.forEach(function (entry) {
+        if (entry.id === id) tab = entry;
+      });
+      button.classList.toggle("is-on", id === state.tab);
+      var label = button.querySelector(".tab-label");
+      if (!label) {
+        label = document.createElement("span");
+        label.className = "tab-label";
+        button.textContent = "";
+        button.appendChild(label);
+      }
+      var fallback = id === "drink" ? "酒飲" : "食物";
+      if (document.activeElement !== label) label.textContent = (tab && String(tab.name || "").trim()) || fallback;
+      label.contentEditable = editing ? "true" : "false";
+      if (editing) label.setAttribute("aria-label", "分頁名稱");
+      else label.removeAttribute("aria-label");
+      if (label.getAttribute("data-bound")) return;
+      label.setAttribute("data-bound", "1");
+      bindPlain(label, function (value) {
+        var current = null;
+        state.tabs.forEach(function (entry) {
+          if (entry.id === id) current = entry;
+        });
+        if (!current) return;
+        current.name = value;
+        touch();
+        writeStatus();
+      }, true);
+      label.addEventListener("focus", function () {
+        if (!editing || id === state.tab) return;
+        flushEditors();
+        state.tab = id;
+        render(false);
+      });
+    });
+    var tab = activeTab();
+    chips.replaceChildren();
+    tab.groups.forEach(function (group) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.textContent = group.name;
+      button.addEventListener("click", function () {
+        var target = document.getElementById("group-" + group.id);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      chips.appendChild(button);
+    });
+    list.replaceChildren();
+    tab.groups.forEach(function (group, index) {
+      list.appendChild(buildGroup(group, index, tab.groups.length));
+    });
+    writeStatus();
+    window.scrollTo(0, y);
+  }
+
+  function buildGroup(group, groupIndex, groupCount) {
+    var section = document.createElement("section");
+    section.className = "group";
+    section.id = "group-" + group.id;
+    section.setAttribute("data-group", group.id);
+    var head = document.createElement("div");
+    head.className = "group-head";
+    var title = document.createElement("h2");
+    title.className = "group-title";
+    title.textContent = group.name;
+    head.appendChild(title);
+    if (group.english) {
+      var english = document.createElement("p");
+      english.className = "group-en";
+      english.textContent = group.english;
+      head.appendChild(english);
+    }
+    if (editing || group.note) {
+      if (editing) {
+        var label = document.createElement("p");
+        label.className = "field-label";
+        label.textContent = "這一類的說明（點字即可修改）";
+        head.appendChild(label);
+      }
+      var note = document.createElement("p");
+      note.className = "group-note";
+      note.textContent = group.note;
+      if (editing) {
+        note.contentEditable = "true";
+        bindPlain(note, function (value) { group.note = value; touch(); }, false);
+      }
+      head.appendChild(note);
+    }
+    section.appendChild(head);
+    if (editing) section.appendChild(buildGroupTools(group, groupIndex, groupCount));
+    if (!group.items.length && editing) {
+      var empty = document.createElement("p");
+      empty.className = "group-note";
+      empty.textContent = "這一類還沒有品項，可以按下面的「加一項」。";
+      section.appendChild(empty);
+    }
+    group.items.forEach(function (entry, index) {
+      section.appendChild(buildSpread(entry, index, group));
+    });
+    return section;
+  }
+
+  function buildSpread(entry, index, group) {
+    var section = document.createElement("article");
+    section.className = "spread";
+    section.setAttribute("data-id", entry.id);
+    var photo = document.createElement("div");
+    photo.className = "photo";
+    if (entry.image) {
+      var img = document.createElement("img");
+      img.src = entry.image;
+      img.alt = entry.title || "餐點";
+      if (entry.fit === "contain") {
+        img.className = "contain";
+        photo.classList.add("has-contain");
+      }
+      photo.appendChild(img);
+    } else {
+      var ph = document.createElement("div");
+      ph.className = "ph";
+      ph.textContent = state.tab === "drink" ? "酒" : "食";
+      photo.appendChild(ph);
+    }
+    if (editing) {
+      var photoBtn = document.createElement("button");
+      photoBtn.type = "button";
+      photoBtn.className = "photo-btn";
+      var chip = document.createElement("span");
+      chip.textContent = entry.image ? "更換圖片" : "加上圖片";
+      photoBtn.setAttribute("aria-label", chip.textContent);
+      photoBtn.appendChild(chip);
+      photoBtn.addEventListener("click", function () { pickImage(entry.id); });
+      photo.appendChild(photoBtn);
+      photo.addEventListener("dragover", function (e) { e.preventDefault(); });
+      photo.addEventListener("drop", function (e) {
+        e.preventDefault();
+        var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) applyImage(entry.id, file);
+      });
+    }
+    var copy = document.createElement("div");
+    copy.className = "copy";
+    var inner = document.createElement("div");
+    inner.className = "copy-inner";
+    var num = document.createElement("p");
+    num.className = "num";
+    num.textContent = String(index + 1).padStart(2, "0");
+    var title = document.createElement("h3");
+    title.className = "title";
+    title.textContent = entry.title;
+    var english = document.createElement("p");
+    english.className = "en";
+    english.textContent = entry.english;
+    var price = document.createElement("p");
+    price.className = "price";
+    price.textContent = entry.price;
+    var body = document.createElement("p");
+    body.className = "body";
+    body.textContent = entry.text;
+    inner.appendChild(num);
+    if (editing) appendLabel(inner, "名稱");
+    inner.appendChild(title);
+    if (editing || entry.english) {
+      if (editing) appendLabel(inner, "英文");
+      inner.appendChild(english);
+    }
+    if (editing || entry.price) {
+      if (editing) appendLabel(inner, "價格");
+      inner.appendChild(price);
+    }
+    if (editing || entry.text) {
+      if (editing) appendLabel(inner, "補充說明");
+      inner.appendChild(body);
+    }
+    if (editing) {
+      title.contentEditable = "true";
+      english.contentEditable = "true";
+      price.contentEditable = "true";
+      body.contentEditable = "true";
+      bindPlain(title, function (value) { entry.title = value; touch(); }, true);
+      bindPlain(english, function (value) { entry.english = value; touch(); }, true);
+      bindPlain(price, function (value) { entry.price = value; touch(); }, true);
+      bindPlain(body, function (value) { entry.text = value; touch(); }, false);
+      inner.appendChild(buildTools(entry, index, group));
+    }
+    copy.appendChild(inner);
+    section.appendChild(photo);
+    section.appendChild(copy);
+    return section;
+  }
+
+  function appendLabel(parent, text) {
+    var label = document.createElement("p");
+    label.className = "field-label";
+    label.textContent = text + "（點字即可修改）";
+    parent.appendChild(label);
+  }
+
+  function toolButton(label, onClick, disabled) {
+    var button = document.createElement("button");
+    button.type = "button";
+    button.textContent = label;
+    button.disabled = !!disabled;
+    button.addEventListener("click", onClick);
+    return button;
+  }
+
+  function buildTools(entry, index, group) {
+    var tools = document.createElement("div");
+    tools.className = "item-tools";
+    var last = group.items.length - 1;
+    tools.appendChild(toolButton("最上", function () { moveItem(entry.id, "start"); }, index === 0));
+    tools.appendChild(toolButton("上移", function () { moveItem(entry.id, "up"); }, index === 0));
+    tools.appendChild(toolButton("下移", function () { moveItem(entry.id, "down"); }, index === last));
+    tools.appendChild(toolButton("最下", function () { moveItem(entry.id, "end"); }, index === last));
+    tools.appendChild(toolButton("下面加一項", function () { addAfter(entry.id); }, false));
+    if (entry.image) tools.appendChild(toolButton("移除圖片", function () { clearImage(entry.id); }, false));
+    tools.appendChild(toolButton("刪除這項", function () { removeItem(entry.id); }, false));
+    return tools;
+  }
+
+  function moveWithin(list, index, where) {
+    var next = index;
+    if (where === "up") next = index - 1;
+    else if (where === "down") next = index + 1;
+    else if (where === "start") next = 0;
+    else if (where === "end") next = list.length - 1;
+    if (next === index || next < 0 || next >= list.length) return false;
+    list.splice(next, 0, list.splice(index, 1)[0]);
+    return true;
+  }
+
+  function locateGroup(id) {
+    var t, g;
+    for (t = 0; t < state.tabs.length; t += 1) {
+      var groups = state.tabs[t].groups;
+      for (g = 0; g < groups.length; g += 1) {
+        if (groups[g].id === id) return { groups: groups, index: g };
+      }
+    }
+    return null;
+  }
+
+  function buildGroupTools(group, index, count) {
+    var tools = document.createElement("div");
+    tools.className = "group-tools";
+    var last = count - 1;
+    tools.appendChild(toolButton("這一區最上", function () { moveGroup(group.id, "start"); }, index === 0));
+    tools.appendChild(toolButton("這一區上移", function () { moveGroup(group.id, "up"); }, index === 0));
+    tools.appendChild(toolButton("這一區下移", function () { moveGroup(group.id, "down"); }, index === last));
+    tools.appendChild(toolButton("這一區最下", function () { moveGroup(group.id, "end"); }, index === last));
+    return tools;
+  }
+
+  function moveGroup(id, where) {
+    flushEditors();
+    var found = locateGroup(id);
+    if (!found || !moveWithin(found.groups, found.index, where)) return;
+    touch();
+    render();
+    var el = document.getElementById("group-" + id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function moveItem(id, where) {
+    flushEditors();
+    var found = locate(id);
+    if (!found || !moveWithin(found.group.items, found.index, where)) return;
+    touch();
+    render();
+    var el = document.querySelector('[data-id="' + id + '"]');
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function addAfter(id) {
+    flushEditors();
+    var found = locate(id);
+    if (!found) return;
+    var created = blankItem();
+    found.group.items.splice(found.index + 1, 0, created);
+    touch();
+    render();
+    var el = document.querySelector('[data-id="' + created.id + '"]');
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function addAtEnd() {
+    flushEditors();
+    var groups = activeTab().groups;
+    var group = groups[groups.length - 1];
+    var created = blankItem();
+    group.items.push(created);
+    touch();
+    render();
+    var el = document.querySelector('[data-id="' + created.id + '"]');
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function removeItem(id) {
+    var found = locate(id);
+    if (!found) return;
+    var name = found.group.items[found.index].title || "這一項";
+    if (!confirm("確定刪除「" + name + "」？")) return;
+    found.group.items.splice(found.index, 1);
+    touch();
+    render();
+  }
+
+  function clearImage(id) {
+    var found = locate(id);
+    if (!found || !found.group.items[found.index].image) return;
+    if (!confirm("拿掉這張圖片？")) return;
+    found.group.items[found.index].image = "";
+    touch();
+    render();
+  }
+
+  function isImage(file) {
+    if (file.type && file.type.indexOf("image/") === 0) return true;
+    return /\.(jpe?g|png|webp|gif)$/i.test(file.name || "");
+  }
+
+  function loadImageEl(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function () { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("load")); };
+      img.src = url;
+    });
+  }
+
+  function loadSource(file) {
+    if (window.createImageBitmap) {
+      return createImageBitmap(file, { imageOrientation: "from-image" }).catch(function () {
+        return loadImageEl(file);
+      });
+    }
+    return loadImageEl(file);
+  }
+
+  function fileToImage(file) {
+    return loadSource(file).then(function (source) {
+      var maxSide = 1600;
+      var scale = Math.min(1, maxSide / Math.max(source.width, source.height));
+      var canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(source.width * scale));
+      canvas.height = Math.max(1, Math.round(source.height * scale));
+      var ctx = canvas.getContext("2d", { alpha: false });
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
+      if (source.close) source.close();
+      var quality = 0.82;
+      var url = canvas.toDataURL("image/jpeg", quality);
+      while (url.length > 700000 && quality > 0.5) {
+        quality -= 0.08;
+        url = canvas.toDataURL("image/jpeg", quality);
+      }
+      return url;
+    });
+  }
+
+  function applyImage(id, file) {
+    var found = locate(id);
+    if (!found) return;
+    if (!isImage(file)) { alert("請選擇圖片檔，例如 JPG 或 PNG。"); return; }
+    statusNote = "圖片處理中…";
+    writeStatus();
+    fileToImage(file).then(function (url) {
+      found.group.items[found.index].image = url;
+      touch();
+      render();
+    }).catch(function () {
+      alert("這張圖片沒辦法讀取，請改用 JPG 或 PNG。");
+      statusNote = "圖片沒有換成功。";
+      writeStatus();
+    });
+  }
+
+  function pickImage(id) {
+    pickingId = id;
+    fileInput.value = "";
+    fileInput.click();
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"]/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[ch];
+    });
+  }
+
+  function buildDownloadHtml(hideEditor) {
+    flushEditors();
+    var snapshot = clone(state);
+    snapshot.fileId = "f" + Date.now().toString(36);
+    snapshot.updatedAt = Date.now();
+    var style = document.getElementById("app-style").textContent;
+    var logic = document.getElementById("app-script").textContent;
+    if (!style || !logic) throw new Error("empty");
+    var data = JSON.stringify(snapshot).replace(/</g, "\\u003c");
+    var title = escapeHtml(snapshot.restaurantName || "拉撒咪呀居酒屋");
+    var button = hideEditor ? "" : '<button type="button" id="editToggle" class="edit-toggle">編輯內容</button>';
+    return "<!DOCTYPE html>\n<html lang=\"zh-Hant\">\n<head>\n"
+      + "<meta charset=\"utf-8\">\n"
+      + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n"
+      + "<meta name=\"theme-color\" content=\"#24362f\">\n"
+      + "<title>" + title + "</title>\n"
+      + "<style id=\"app-style\">" + style + "</style>\n</head>\n<body>\n"
+      + "<div class=\"sticky-head\"><header class=\"topbar\"><div class=\"brand-wrap\">"
+      + "<p class=\"brand-label\">餐廳名稱（點字即可修改）</p>"
+      + "<h1 id=\"brand\" class=\"brand\" aria-label=\"餐廳名稱\"></h1></div>"
+      + button + "</header>"
+      + "<div class=\"quick\"><a href=\"https://maps.app.goo.gl/XQ9icxjaansuzrmB9\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>"
+      + "<a href=\"https://www.instagram.com/rasamiyaizakaya/\" target=\"_blank\" rel=\"noopener\">Instagram</a></div>"
+      + "<p class=\"tabs-hint\">分頁名稱（點字即可修改）</p>"
+      + "<div class=\"tabs\" id=\"tabs\" role=\"tablist\"><div class=\"tab\" data-tab=\"food\" role=\"tab\" tabindex=\"0\"><span class=\"tab-label\">食物</span></div>"
+      + "<div class=\"tab\" data-tab=\"drink\" role=\"tab\" tabindex=\"0\"><span class=\"tab-label\">酒飲</span></div></div>"
+      + "<div class=\"chips\" id=\"chips\"></div></div>\n"
+      + "<main id=\"list\" aria-label=\"菜單\"></main>\n"
+      + "<div class=\"editbar\" id=\"editbar\"><p class=\"status\" id=\"status\" aria-live=\"polite\"></p>"
+      + "<label class=\"check\"><input type=\"checkbox\" id=\"hideEdit\" checked>給客人的檔案隱藏編輯按鈕</label>"
+      + "<div class=\"edit-actions\"><button type=\"button\" id=\"downloadBtn\">下載網頁</button>"
+      + "<button type=\"button\" id=\"addBtn\">加一項</button>"
+      + "<button type=\"button\" id=\"resetBtn\">恢復菜單</button></div></div>\n"
+      + "<input id=\"file\" type=\"file\" accept=\"image/*\" hidden>\n"
+      + "<script id=\"site-data\" type=\"application/json\">" + data + "<" + "/script>\n"
+      + "<script id=\"app-script\">" + logic + "<" + "/script>\n"
+      + "</body>\n</html>\n";
+  }
+
+  function downloadPage() {
+    var hide = hideEdit ? hideEdit.checked : false;
+    var html;
+    try { html = buildDownloadHtml(hide); }
+    catch (e) { alert("這個頁面沒辦法下載。請用原本的「開啟網頁」重新打開。"); return; }
+    var blob = new Blob([html], { type: "text/html;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement("a");
+    var name = (state.restaurantName || "拉撒咪呀居酒屋").replace(/[\\/:*?"<>|]/g, "").trim() || "拉撒咪呀居酒屋";
+    link.href = url;
+    link.download = name + ".html";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    statusNote = "已下載。這個檔案要和 images 資料夾放在一起，照片才看得到。";
+    writeStatus();
+  }
+
+  function resetSample() {
+    if (!confirm("恢復成簡報上的菜單？你改過的文字和圖片都會清掉。")) return;
+    var fresh = normalize(defaultState());
+    fresh.updatedAt = Date.now();
+    fresh.fileId = state.fileId || "";
+    fresh.tab = state.tab;
+    state = fresh;
+    touch();
+    saveNow();
+    statusNote = "已恢復菜單。";
+    render(false);
+  }
+
+  bindPlain(brand, function (value) {
+    state.restaurantName = value;
+    document.title = value || "拉撒咪呀居酒屋";
+    touch();
+  }, true);
+
+  Array.prototype.forEach.call(document.querySelectorAll(".tabs .tab"), function (button) {
+    button.addEventListener("click", function () {
+      var id = button.getAttribute("data-tab");
+      if (id === state.tab) return;
+      if (editing) flushEditors();
+      state.tab = id;
+      render(false);
+    });
+    button.addEventListener("keydown", function (e) {
+      if (editing || (e.key !== "Enter" && e.key !== " ")) return;
+      e.preventDefault();
+      state.tab = button.getAttribute("data-tab");
+      render(false);
+    });
+  });
+  if (editToggle) {
+    editToggle.addEventListener("click", function () {
+      if (editing) flushEditors();
+      editing = !editing;
+      if (!editing && !String(state.restaurantName || "").trim()) state.restaurantName = "拉撒咪呀居酒屋";
+      if (!editing) {
+        state.tabs.forEach(function (tab) {
+          if (!String(tab.name || "").trim()) tab.name = tab.id === "drink" ? "酒飲" : "食物";
+        });
+      }
+      render();
+    });
+  }
+  if (downloadBtn) downloadBtn.addEventListener("click", downloadPage);
+  if (addBtn) addBtn.addEventListener("click", addAtEnd);
+  if (resetBtn) resetBtn.addEventListener("click", resetSample);
+  if (hideEdit) {
+    var savedHide = localStorage.getItem(HIDE_KEY);
+    hideEdit.checked = savedHide === null ? true : savedHide === "1";
+    hideEdit.addEventListener("change", function () {
+      localStorage.setItem(HIDE_KEY, hideEdit.checked ? "1" : "0");
+    });
+  }
+  if (fileInput) {
+    fileInput.addEventListener("change", function () {
+      var file = fileInput.files && fileInput.files[0];
+      var id = pickingId;
+      fileInput.value = "";
+      if (file && id) applyImage(id, file);
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

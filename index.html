@@ -360,8 +360,8 @@ body.is-editing { padding-bottom: calc(168px + env(safe-area-inset-bottom)); }
   </div>
   <p class="tabs-hint">分頁名稱（點字即可修改）</p>
   <div class="tabs" id="tabs" role="tablist">
-    <div class="tab" data-tab="food" role="tab" tabindex="0"><span class="tab-label">食物</span></div>
-    <div class="tab" data-tab="drink" role="tab" tabindex="0"><span class="tab-label">酒飲</span></div>
+    <div class="tab" data-tab="food" role="tab" tabindex="0"><span class="tab-label">食物 Food</span></div>
+    <div class="tab" data-tab="drink" role="tab" tabindex="0"><span class="tab-label">酒飲 Drink</span></div>
   </div>
   <div class="chips" id="chips"></div>
 </div>
@@ -417,7 +417,7 @@ body.is-editing { padding-bottom: calc(168px + env(safe-area-inset-bottom)); }
       tabs: [
         {
           id: "food",
-          name: "食物",
+          name: "食物 Food",
           groups: [
             {
               id: "about",
@@ -517,13 +517,13 @@ body.is-editing { padding-bottom: calc(168px + env(safe-area-inset-bottom)); }
         },
         {
           id: "drink",
-          name: "酒飲",
+          name: "酒飲 Drink",
           groups: [
             {
               id: "sake",
               name: "清酒",
               english: "Sake",
-              note: "目前酒單先放清酒。小瓶 300ml，大瓶 720ml。沒有寫出來的尺寸，代表現在沒有這一瓶。",
+              note: "清酒 //小瓶 300ml，大瓶 720ml。沒有寫出來的尺寸，代表現在沒有這一瓶。",
               items: [
                 item("ittteki", "一滴入魂", "賀茂鶴｜純米吟釀", "300ml 850 元　720ml 1,850 元", "香氣層層打開，溫潤而辛口，餘味留得久。\n精米步合 60%｜八反錦1號｜酒精度 15.5%｜日本酒度 +3", "images/sake-ittteki.png", "contain"),
                 item("ginhitomi", "吟之瞳", "喜多屋｜大吟釀", "300ml 800 元　720ml 1,800 元", "生酒呈現俐落辛口、圓潤口感。100% 使用在地「吟之里」，果香輕盈。\n精米步合 50%｜吟之里｜酒精度 15.2%｜日本酒度 +6", "images/sake-gin.png", "contain"),
@@ -538,13 +538,13 @@ body.is-editing { padding-bottom: calc(168px + env(safe-area-inset-bottom)); }
               id: "nama",
               name: "生原酒／氣泡",
               english: "Namazake / Soda",
-              note: "日本盛。瓶身是 200ml。簡報上還沒有標價格，可以之後再補。",
+              note: "來自 日本盛",
               items: [
-                item("honjozo", "本釀造生原酒", "日本盛｜白瓶", "", "奢華醇厚，保留經典風味，濃醇旨味。\n200ml", "images/sake-honjozo.png", "contain"),
-                item("namagin", "大吟釀生原酒", "日本盛｜藍瓶", "", "吟釀香氣華麗，清爽細膩，尾韻乾淨。\n200ml", "images/sake-daiginjo-nama.png", "contain"),
-                item("namajun", "純米吟釀生原酒", "日本盛｜紅瓶", "", "醇厚旨味配上細緻果香，口感平衡，微辛口。\n200ml", "images/sake-junmai-ginjo.png", "contain"),
-                item("namadai", "純米大吟釀生原酒", "日本盛｜金瓶", "", "蘋果與水蜜桃般的果香。口感醇厚圓潤，層次清楚。\n200ml", "images/sake-junmai-daiginjo.png", "contain"),
-                item("soda", "JAPAN SODA", "日本盛｜氣泡清酒", "", "日本酒加入碳酸，酸甜輕盈，有細緻氣泡。\n200ml｜酒精度 7%", "images/sake-soda.png", "contain")
+                item("honjozo", "本釀造生原酒", "日本盛｜白瓶", "200ml 240 元", "奢華醇厚，保留經典風味，濃醇旨味。", "images/sake-honjozo.png", "contain"),
+                item("namagin", "大吟釀生原酒", "日本盛｜藍瓶", "200ml 280 元", "吟釀香氣華麗，清爽細膩，尾韻乾淨。", "images/sake-daiginjo-nama.png", "contain"),
+                item("namajun", "純米吟釀生原酒", "日本盛｜紅瓶", "200ml 280 元", "醇厚旨味配上細緻果香，口感平衡，微辛口。", "images/sake-junmai-ginjo.png", "contain"),
+                item("namadai", "純米大吟釀生原酒", "日本盛｜金瓶", "200ml 320 元", "蘋果與水蜜桃般的果香。口感醇厚圓潤，層次清楚。", "images/sake-junmai-daiginjo.png", "contain"),
+                item("soda", "JAPAN SODA", "日本盛｜氣泡清酒", "180ml 240 元", "日本酒加入碳酸，酸甜輕盈，有細緻氣泡。\n酒精度 7%", "images/sake-soda.png", "contain")
               ]
             },
             {
@@ -1232,8 +1232,8 @@ body.is-editing { padding-bottom: calc(168px + env(safe-area-inset-bottom)); }
       + "<div class=\"quick\"><a href=\"https://maps.app.goo.gl/XQ9icxjaansuzrmB9\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>"
       + "<a href=\"https://www.instagram.com/rasamiyaizakaya/\" target=\"_blank\" rel=\"noopener\">Instagram</a></div>"
       + "<p class=\"tabs-hint\">分頁名稱（點字即可修改）</p>"
-      + "<div class=\"tabs\" id=\"tabs\" role=\"tablist\"><div class=\"tab\" data-tab=\"food\" role=\"tab\" tabindex=\"0\"><span class=\"tab-label\">食物</span></div>"
-      + "<div class=\"tab\" data-tab=\"drink\" role=\"tab\" tabindex=\"0\"><span class=\"tab-label\">酒飲</span></div></div>"
+      + "<div class=\"tabs\" id=\"tabs\" role=\"tablist\"><div class=\"tab\" data-tab=\"food\" role=\"tab\" tabindex=\"0\"><span class=\"tab-label\">食物 Food</span></div>"
+      + "<div class=\"tab\" data-tab=\"drink\" role=\"tab\" tabindex=\"0\"><span class=\"tab-label\">酒飲 Drink</span></div></div>"
       + "<div class=\"chips\" id=\"chips\"></div></div>\n"
       + "<main id=\"list\" aria-label=\"菜單\"></main>\n"
       + "<div class=\"editbar\" id=\"editbar\"><p class=\"status\" id=\"status\" aria-live=\"polite\"></p>"

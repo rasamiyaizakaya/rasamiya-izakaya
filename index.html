@@ -388,6 +388,10 @@ body.is-editing { padding-bottom: calc(168px + env(safe-area-inset-bottom)); }
   var list = document.getElementById("list");
   var chips = document.getElementById("chips");
   var editToggle = document.getElementById("editToggle");
+  if (editToggle && location.protocol !== "file:") {
+    editToggle.remove();
+    editToggle = null;
+  }
   var statusEl = document.getElementById("status");
   var downloadBtn = document.getElementById("downloadBtn");
   var addBtn = document.getElementById("addBtn");
